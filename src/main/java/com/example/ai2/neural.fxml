@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="502.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ai2.neuralController">
+   <children>
+      <ImageView fitHeight="502.0" fitWidth="742.0" layoutX="79.0" layoutY="-96.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../neural-network-high-resolution-logo.png" />
+         </image>
+      </ImageView>
+      <Pane prefHeight="503.0" prefWidth="200.0" style="-fx-background-color: #0b0b35; -fx-border-radius: 10px;">
+         <children>
+            <Button fx:id="idRun" layoutX="-3.0" layoutY="452.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #0b0b35;" text="Run" textFill="#e7e6e6">
+               <font>
+                  <Font name="System Italic" size="24.0" />
+               </font>
+            </Button>
+            <TextField fx:id="idSweetnss" layoutX="-6.0" layoutY="117.0" prefHeight="51.0" prefWidth="206.0" promptText="   Sweetness" style="-fx-background-color: #0b0b35;">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Label layoutX="4.0" layoutY="8.0" prefHeight="35.0" prefWidth="193.0" text="Neural Netwwork" textFill="#efebeb">
+               <font>
+                  <Font name="System Bold Italic" size="22.0" />
+               </font>
+            </Label>
+            <TextField fx:id="idColor" layoutY="82.0" prefHeight="35.0" prefWidth="200.0" promptText="  Color" style="-fx-background-color: #0b0b35;">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <ChoiceBox fx:id="myChoiceBox" layoutX="-6.0" layoutY="352.0" prefHeight="46.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" />
+            <Label layoutX="1.0" layoutY="320.0" prefHeight="46.0" prefWidth="193.0" text="   Activation function" textFill="#efebeb">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="idRate" layoutY="217.0" prefHeight="46.0" prefWidth="200.0" promptText="  Learning rate" style="-fx-background-color: #0b0b35;">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <TextField fx:id="idPerceptron" layoutX="1.0" layoutY="255.0" prefHeight="51.0" prefWidth="200.0" promptText="  Perceptron number" style="-fx-background-color: #0b0b35;">
+               <font>
+                  <Font size="15.0" />
+               </font></TextField>
+            <Button fx:id="idUpload" layoutX="1.0" layoutY="413.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Upload file" textFill="#efecec">
+               <font>
+                  <Font name="System Italic" size="22.0" />
+               </font>
+            </Button>
+            <Button fx:id="idAdd" layoutX="-3.0" layoutY="166.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Add to File" textFill="WHITE">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+      <TableView fx:id="idTable" layoutX="199.0" layoutY="229.0" prefHeight="274.0" prefWidth="550.0">
+        <columns>
+          <TableColumn prefWidth="144.0000762939453" text="Color" />
+          <TableColumn minWidth="6.39996337890625" prefWidth="126.39996337890625" text="Sweetness" />
+            <TableColumn minWidth="6.39996337890625" prefWidth="126.39999389648438" text="Desired Name" />
+            <TableColumn minWidth="6.39996337890625" prefWidth="145.5999755859375" text="C2" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

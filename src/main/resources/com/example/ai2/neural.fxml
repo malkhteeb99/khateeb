@@ -53,7 +53,7 @@
                <font>
                   <Font size="15.0" />
                </font></TextField>
-            <Button fx:id="idUpload" layoutX="1.0" layoutY="413.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Upload file" textFill="#efecec">
+            <Button fx:id="idUpload" layoutX="1.0" layoutY="413.0" mnemonicParsing="false" onAction="#readFromFile" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Upload file" textFill="#efecec">
                <font>
                   <Font name="System Italic" size="22.0" />
                </font>
@@ -67,10 +67,10 @@
       </Pane>
       <TableView fx:id="idTable" layoutX="199.0" layoutY="229.0" prefHeight="274.0" prefWidth="550.0">
         <columns>
-          <TableColumn prefWidth="144.0000762939453" text="Color" />
-            <TableColumn minWidth="6.39996337890625" prefWidth="126.39999389648438" text="Sweetness" />
-          <TableColumn minWidth="6.39996337890625" prefWidth="126.39996337890625" text="Actual output" />
-            <TableColumn minWidth="6.39996337890625" prefWidth="150.0" text="Desired output" />
+          <TableColumn fx:id="sweetnessColumn" prefWidth="144.0000762939453" text="Sweetness" />
+            <TableColumn fx:id="colorColumn" minWidth="6.39996337890625" prefWidth="126.39999389648438" text="color" />
+          <TableColumn fx:id="actualOutput" minWidth="6.39996337890625" prefWidth="126.39996337890625" text="Actual output" />
+            <TableColumn fx:id="dOutput" minWidth="6.39996337890625" prefWidth="150.0" text="Desired output" />
         </columns>
       </TableView>
    </children>

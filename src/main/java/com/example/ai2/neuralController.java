@@ -3,10 +3,7 @@ package com.example.ai2;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +14,10 @@ public class neuralController implements Initializable {
     private Button idAdd;
 
     @FXML
-    private TextField idColor;
+    private Label idAccuracy;
+
+    @FXML
+    private Label idPerformance;
 
     @FXML
     private TextField idPerceptron;
@@ -27,9 +27,6 @@ public class neuralController implements Initializable {
 
     @FXML
     private Button idRun;
-
-    @FXML
-    private TextField idSweetnss;
 
     @FXML
     private TableView<String> idTable;

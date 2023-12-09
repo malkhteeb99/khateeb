@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="502.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ai2.neuralController">
    <children>
-      <ImageView fitHeight="502.0" fitWidth="742.0" layoutX="79.0" layoutY="-96.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="502.0" fitWidth="742.0" layoutX="79.0" layoutY="-136.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../../neural-network-high-resolution-logo.png" />
          </image>
@@ -26,30 +26,22 @@
                   <Font name="System Italic" size="24.0" />
                </font>
             </Button>
-            <TextField fx:id="idSweetnss" layoutX="-6.0" layoutY="117.0" prefHeight="51.0" prefWidth="206.0" promptText="   Sweetness" style="-fx-background-color: #0b0b35;">
-               <font>
-                  <Font size="15.0" />
-               </font></TextField>
             <Label layoutX="4.0" layoutY="8.0" prefHeight="35.0" prefWidth="193.0" text="Neural Netwwork" textFill="#efebeb">
                <font>
                   <Font name="System Bold Italic" size="22.0" />
                </font>
             </Label>
-            <TextField fx:id="idColor" layoutY="82.0" prefHeight="35.0" prefWidth="200.0" promptText="  Color" style="-fx-background-color: #0b0b35;">
-               <font>
-                  <Font size="15.0" />
-               </font></TextField>
-            <ChoiceBox fx:id="myChoiceBox" layoutX="-6.0" layoutY="352.0" prefHeight="46.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" />
-            <Label layoutX="1.0" layoutY="320.0" prefHeight="46.0" prefWidth="193.0" text="   Activation function" textFill="#efebeb">
+            <ChoiceBox fx:id="myChoiceBox" layoutX="-2.0" layoutY="217.0" prefHeight="46.0" prefWidth="200.0" style="-fx-background-color: #11114a; -fx-border-style: 10px;" />
+            <Label layoutX="5.0" layoutY="160.0" prefHeight="46.0" prefWidth="193.0" text="   Activation function" textFill="#efebeb">
                <font>
                   <Font name="System Italic" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="idRate" layoutY="217.0" prefHeight="46.0" prefWidth="200.0" promptText="  Learning rate" style="-fx-background-color: #0b0b35;">
+            <TextField fx:id="idRate" layoutY="63.0" prefHeight="46.0" prefWidth="200.0" promptText="  Learning rate" style="-fx-background-color: #0b0b35;">
                <font>
                   <Font size="15.0" />
                </font></TextField>
-            <TextField fx:id="idPerceptron" layoutX="1.0" layoutY="255.0" prefHeight="51.0" prefWidth="200.0" promptText="  Perceptron number" style="-fx-background-color: #0b0b35;">
+            <TextField fx:id="idPerceptron" layoutX="-2.0" layoutY="109.0" prefHeight="51.0" prefWidth="200.0" promptText="  Perceptron number" style="-fx-background-color: #0b0b35;">
                <font>
                   <Font size="15.0" />
                </font></TextField>
@@ -58,11 +50,16 @@
                   <Font name="System Italic" size="22.0" />
                </font>
             </Button>
-            <Button fx:id="idAdd" layoutX="-3.0" layoutY="166.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Add to File" textFill="WHITE">
+            <Label fx:id="idAccuracy" layoutX="-2.0" layoutY="282.0" prefHeight="46.0" prefWidth="200.0" text="    Accuracy" textFill="#b1a9a9">
                <font>
-                  <Font name="System Italic" size="20.0" />
+                  <Font name="System Italic" size="16.0" />
                </font>
-            </Button>
+            </Label>
+            <Label fx:id="idPerformance" layoutX="2.0" layoutY="328.0" prefHeight="46.0" prefWidth="200.0" text="   Performance" textFill="#b1a9a9">
+               <font>
+                  <Font name="System Italic" size="16.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <TableView fx:id="idTable" layoutX="199.0" layoutY="229.0" prefHeight="274.0" prefWidth="550.0">

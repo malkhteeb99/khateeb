@@ -56,6 +56,7 @@ public class neuralController implements Initializable
     }
     private void initializeWeights()
     {
+        String activationFunction = myChoiceBox.getValue();
         int numHidden = Integer.parseInt(idPerceptron.getText());
         double rangeInputHidden = 2.4/2;
         double rangeHiddenOutput = 2.4/numHidden;
@@ -68,34 +69,46 @@ public class neuralController implements Initializable
         //input to hidden layer
         for (int i = 0; i < numHidden; i++)
         {
-            for (int j = 0; j < 2; j++)
+            for (int j = 0; j < numInputs; j++)
                 weightsInputToHidden[i][j] = (random() * 2 * rangeInputHidden) - rangeInputHidden;
             thresholdHidden[i] = (random() * 2 * rangeInputHidden) - rangeInputHidden;
         }
         //hidden to output layer
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < numOutputs; i++)
         {
             for (int j = 0; j < numHidden; j++)
                 weightsHiddenToOutput[i][j] = (random() * 2 * rangeHiddenOutput) - rangeHiddenOutput;
             thresholdOutput[i] = (random() * 2 * rangeHiddenOutput) - rangeHiddenOutput;
         }
+        // Calculate output of hidden layer
+        double hiddenLayerOutputs[] = new double[numHidden];
+        for (int i = 0; i < numHidden; i++)
+        {
+            for (int j = 0; j < numInputs; j++)
+            {
+                hiddenLayerOutputs[i] += weightsInputToHidden[i][j] * weightsInputToHidden[i][j];
+            }
+            if(activationFunction.equalsIgnoreCase("sigmoid"))
+                hiddenLayerOutputs[i] = sigmoid(hiddenLayerOutputs[i] + thresholdHidden[i]);
+            if(activationFunction.equalsIgnoreCase("tanh"))
+                hiddenLayerOutputs[i] = tanh(hiddenLayerOutputs[i] + thresholdHidden[i]);
+            if(activationFunction.equalsIgnoreCase("relu"))
+                hiddenLayerOutputs[i] = relu(hiddenLayerOutputs[i] + thresholdHidden[i]);
+        }
+        // Calculate output of output layer
+        double outputLayerOutputs[] = new double[numOutputs];
+        for (int i = 0; i < outputLayerOutputs.length; i++) {
+            for (int j = 0; j < hiddenLayerOutputs.length; j++) {
+                outputLayerOutputs[i] += hiddenLayerOutputs[j] * weightsHiddenToOutput[i][j];
+            }
+            if(activationFunction.equalsIgnoreCase("sigmoid"))
+                outputLayerOutputs[i] = sigmoid(outputLayerOutputs[i] + thresholdOutput[i]);
+            if(activationFunction.equalsIgnoreCase("tanh"))
+                outputLayerOutputs[i] = tanh(outputLayerOutputs[i] + thresholdOutput[i]);
+            if(activationFunction.equalsIgnoreCase("relu"))
+                outputLayerOutputs[i] = relu(outputLayerOutputs[i] + thresholdOutput[i]);
+        }
         //print();
-    }
-
-    public void computeTanh(double input1, double input2, double input3)
-    {
-        //double activation = this.weight1*input1 + this.weight2*input2 + this.weight3*input3;
-        //double output = tanh(activation);
-    }
-    public void computeSigmoid(double input1, double input2, double input3)
-    {
-        //double activation = this.weight1*input1 + this.weight2*input2 + this.weight3*input3;
-        //double output = sigmoid(activation);
-    }
-    public void computerelu(double input1, double input2, double input3)
-    {
-        //double activation = this.weight1*input1 + this.weight2*input2 + this.weight3*input3;
-        //double output = relu(activation);
     }
     public double sigmoid(double x)
     {
@@ -159,22 +172,22 @@ public class neuralController implements Initializable
     {
 
     }
-    public void createNeurons ()
-    {
-        int num = Integer.parseInt(idPerceptron.getText());
-        if(num == 1)
-        {
-        }
-        else if(num>1)
-        {
-            for(int i=0 ; i<num ; i++)
-                for(int j=2 ; j<num ; j++);
-        }
-        else
-        {
-            errorMessage("Please enter the neuron number!");
-        }
-    }
+//    public void createNeurons ()
+//    {
+//        int num = Integer.parseInt(idPerceptron.getText());
+//        if(num == 1)
+//        {
+//        }
+//        else if(num>1)
+//        {
+//            for(int i=0 ; i<num ; i++)
+//                for(int j=2 ; j<num ; j++);
+//        }
+//        else
+//        {
+//            errorMessage("Please enter the neuron number!");
+//        }
+//    }
     public static Double meanSquareLoss(List<Double> correctAnswers, List<Double> predictedAnswers){
         double sumSquare = 0;
         for (int i = 0; i < correctAnswers.size(); i++){

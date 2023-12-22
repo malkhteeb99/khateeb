@@ -21,7 +21,7 @@
       </ImageView>
       <Pane prefHeight="503.0" prefWidth="200.0" style="-fx-background-color: #0b0b35; -fx-border-radius: 10px;">
          <children>
-            <Button fx:id="idRun" layoutX="-3.0" layoutY="452.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #0b0b35;" text="Run" textFill="#e7e6e6">
+            <Button fx:id="idRun" layoutX="-3.0" layoutY="452.0" mnemonicParsing="false" onAction="#run" prefHeight="36.0" prefWidth="206.0" style="-fx-background-color: #0b0b35;" text="Run" textFill="#e7e6e6">
                <font>
                   <Font name="System Italic" size="24.0" />
                </font>
@@ -53,7 +53,7 @@
                <font>
                   <Font size="15.0" />
                </font></TextField>
-            <Button fx:id="idUpload" layoutX="1.0" layoutY="413.0" mnemonicParsing="false" onAction="#readFromFile" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Upload file" textFill="#efecec">
+            <Button fx:id="idUpload" layoutX="1.0" layoutY="413.0" mnemonicParsing="false" onAction="#run" prefHeight="35.0" prefWidth="200.0" style="-fx-background-color: #0b0b35;" text="Upload file" textFill="#efecec">
                <font>
                   <Font name="System Italic" size="22.0" />
                </font>

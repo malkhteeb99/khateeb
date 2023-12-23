@@ -9,6 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import java.io.*;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import static java.lang.Math.random;
@@ -42,29 +43,44 @@ public class neuralController implements Initializable
     @FXML
     private TableColumn<Table, Integer> dOutput;
     Alert alert;
-    private String []activation={"Tanh" , "ReLU" , "Sigmoid"};
+    @FXML
+    private Label accuracy;
+    @FXML
+    private TextField epochs;
+    @FXML
+    private static Label errorRate;
+    @FXML
+    private ChoiceBox<String> myChoiceBox1;
+    private String []hiddenActivation={"Tanh" , "ReLU" , "Sigmoid"};
+    private String []outputActivation={"Tanh" , "Softmax"};
     ObservableList<Table> data = FXCollections.observableArrayList();
     Random random = new Random();
-    static String[] parts;
-    static double [] bOutput;
-    static int numOutputs = 3; // Assuming 3 outputs as
-    static double[] outputLayerOutputs = new double[numOutputs];
-    public int numOfPerceptron = 0;
+    double inMin = -2.4 / 2;
+    double inMax = 2.4 / 2;
+    double inputHiddenRange = inMin + (inMax - inMin) * random.nextDouble();
+    double [] bOutput;
+    double[] inputSweetness;
+    double[] inputColor;
     @Override
     public void initialize(URL arg0 , ResourceBundle arg1)
     {
-        myChoiceBox.getItems().addAll(activation);
+        myChoiceBox.getItems().addAll(hiddenActivation);
+        myChoiceBox1.getItems().addAll(outputActivation);
     }
     private void initializeWeights()
     {
-        String activationFunction = myChoiceBox.getValue();
         int numHidden = Integer.parseInt(idPerceptron.getText());
-        double rangeInputHidden = 2.4/2;
-        double rangeHiddenOutput = 2.4/numHidden;
+        double hMin = -2.4 / numHidden;
+        double hMax = 2.4 / numHidden;
+        double hiddenOutputRange = hMin + (hMax - hMin) * random.nextDouble();
+        String hActivationFunction = myChoiceBox.getValue();
+        String oActivationFunction = myChoiceBox1.getValue();
+        double rangeInputHidden = inputHiddenRange;
+        double rangeHiddenOutput = hiddenOutputRange;
         double thresholdHidden[] = new double[numHidden];
         double thresholdOutput[] = new double[3];
-        int numInputs = 2; // This should be set according to your actual number of inputs
-
+        int numInputs = 2;
+        int numOutputs = 3;
         double[][] weightsInputToHidden = new double[numHidden][numInputs];;
         double[][] weightsHiddenToOutput= new double[numOutputs][numHidden];
         //input to hidden layer
@@ -89,25 +105,40 @@ public class neuralController implements Initializable
             {
                 hiddenLayerOutputs[i] += weightsInputToHidden[i][j] * weightsInputToHidden[i][j];
             }
-            if(activationFunction.equalsIgnoreCase("sigmoid"))
+            if(hActivationFunction.equalsIgnoreCase("sigmoid"))
                 hiddenLayerOutputs[i] = sigmoid(hiddenLayerOutputs[i] + thresholdHidden[i]);
-            if(activationFunction.equalsIgnoreCase("tanh"))
+            if(hActivationFunction.equalsIgnoreCase("tanh"))
                 hiddenLayerOutputs[i] = tanh(hiddenLayerOutputs[i] + thresholdHidden[i]);
-            if(activationFunction.equalsIgnoreCase("relu"))
+            if(hActivationFunction.equalsIgnoreCase("relu"))
                 hiddenLayerOutputs[i] = relu(hiddenLayerOutputs[i] + thresholdHidden[i]);
         }
         // Calculate output of output layer
-
+        double outputLayerOutputs[] = new double[numOutputs];
         for (int i = 0; i < outputLayerOutputs.length; i++) {
             for (int j = 0; j < hiddenLayerOutputs.length; j++) {
                 outputLayerOutputs[i] += hiddenLayerOutputs[j] * weightsHiddenToOutput[i][j];
             }
-            if(activationFunction.equalsIgnoreCase("sigmoid"))
+            if(oActivationFunction.equalsIgnoreCase("sigmoid"))
                 outputLayerOutputs[i] = sigmoid(outputLayerOutputs[i] + thresholdOutput[i]);
-            if(activationFunction.equalsIgnoreCase("tanh"))
+            if(oActivationFunction.equalsIgnoreCase("softMax"))
                 outputLayerOutputs[i] = tanh(outputLayerOutputs[i] + thresholdOutput[i]);
-            if(activationFunction.equalsIgnoreCase("relu"))
-                outputLayerOutputs[i] = relu(outputLayerOutputs[i] + thresholdOutput[i]);
+        }
+        //Train
+        double lRate = Double.parseDouble(idRate.getText());
+        double [] dw = new double[]{inputSweetness.length};
+        double[] errorArray = meanSquareLoss( bOutput , outputLayerOutputs);
+        for (int i =0 ; i< bOutput.length ; i++)
+        {
+            if (errorArray[i] != 0)
+            {
+                for (int z = 0; z < inputSweetness.length; z++)
+                    dw[z]= inputSweetness[z] * inputColor[z] * lRate * errorArray[z];
+                for (int k = 0; k < numHidden; k++)
+                {
+                    for (int j = 0; j < numInputs; j++)
+                        weightsInputToHidden[k][j] = weightsInputToHidden[k][j] + dw[i];
+                }
+            }
         }
         //print();
     }
@@ -122,6 +153,10 @@ public class neuralController implements Initializable
     public double relu(double x)
     {
         return Math.max(0, x);
+    }
+    public double softMax(double x)
+    {
+        return x;
     }
 //    public void print()
 //    {
@@ -143,7 +178,6 @@ public class neuralController implements Initializable
 //            System.out.println(thresholdOutput[i]);
 //        }
 //    }
-
     public void run() throws IOException
     {
         FileChooser fileChooser = new FileChooser();
@@ -156,12 +190,16 @@ public class neuralController implements Initializable
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                parts = line.split("\\s+");
+                String[] parts = line.split("\\s+");
                 int sweetness = Integer.parseInt(parts[0]);
                 int color = Integer.parseInt(parts[1]);
                 int aOutput = Integer.parseInt(parts[2]);
-                for (int i =0 ; i< parts.length; i++)
-                    bOutput[i] = aOutput;
+                for (int i = 0; i< parts.length; i++)
+                {
+                    bOutput[i] = Double.parseDouble(String.valueOf(aOutput));
+                    inputSweetness[i] = Double.parseDouble(String.valueOf(sweetness));
+                    inputColor[i] = Double.parseDouble(String.valueOf(color));
+                }
                 data.add(new Table(sweetness, color, aOutput));           //1 = red, 2 = orange, 3 = purple   //1 = apple, 2 = orange, 3 = grape
             }
         }
@@ -174,20 +212,6 @@ public class neuralController implements Initializable
 
     public void train()
     {
-        double lRate = Double.parseDouble(idRate.getText());
-        double [] dw ;
-        double[] errorArray = meanSquareLoss( bOutput , outputLayerOutputs);
-
-        for (int i =0 ; i< bOutput.length ; i++ ) {
-            if (errorArray[i] != 0) {
-                dw[i]= lRate  ;
-                for (int k = 0; k < numHidden; k++) {
-                    for (int j = 0; j < numInputs; j++)
-                        weightsInputToHidden[k][j] = weightsInputToHidden[k][j] + dw[i];
-                }
-
-            }
-        }
 
     }
 //    public void createNeurons ()
@@ -206,13 +230,17 @@ public class neuralController implements Initializable
 //            errorMessage("Please enter the neuron number!");
 //        }
 //    }
-    public static double[] meanSquareLoss(double bOutput , double outputLayerOutputs) {
-       // double sumSquare = 0;
-        double[] error = new double[];
-        for (int i = 0; i < error.length; i++) {
+    public static double[] meanSquareLoss(double bOutput[] , double outputLayerOutputs[]) {
+
+        double[] error = new double[]{bOutput.length};
+        double err =0;
+        for (int i = 0; i < bOutput.length; i++) {
             error[i] =bOutput[i] - outputLayerOutputs[i];
-            // sumSquare += (error * error);
+             err +=error[i];
+
         }
+       // err=err/bOutput.length;
+        errorRate.setText(String.valueOf(err));
         return error ;
     }
     public void errorMessage(String message)

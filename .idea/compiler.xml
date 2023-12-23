@@ -9,8 +9,5 @@
         <module name="AI2" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="AI2" target="0" />
-    </bytecodeTargetLevel>
   </component>
 </project>

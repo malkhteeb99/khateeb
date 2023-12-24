@@ -42,25 +42,26 @@ public class neuralController implements Initializable
     private TableColumn<Table, Integer> colorColumn;
     @FXML
     private TableColumn<Table, Integer> dOutput;
-    Alert alert;
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    Alert info = new Alert(Alert.AlertType.INFORMATION);
     @FXML
-    private Label accuracy;
+    private TextField accuracy;
     @FXML
     private TextField epochs;
     @FXML
-    private Label errorRate;
+    private TextField errorRate;
     @FXML
     private ChoiceBox<String> myChoiceBox1;
     private String []hiddenActivation={"Tanh" , "ReLU" , "Sigmoid"};
-    private String []outputActivation={"Tanh" , "Softmax"};
+    private String []outputActivation={"Sigmoid" , "Softmax"};
     ObservableList<Table> data = FXCollections.observableArrayList();
     Random random = new Random();
     double inMin = -2.4 / 2;
     double inMax = 2.4 / 2;
     double inputHiddenRange = inMin + (inMax - inMin) * random.nextDouble();
-    double [] bOutput;
-    double[] inputSweetness;
-    double[] inputColor;
+    double []  bOutput = new double[100000];
+    double[] inputSweetness = new double[100000];
+    double[] inputColor = new double[100000];
     @Override
     public void initialize(URL arg0 , ResourceBundle arg1)
     {
@@ -125,22 +126,35 @@ public class neuralController implements Initializable
         }
         //Train
         double lRate = Double.parseDouble(idRate.getText());
-        double [] dw = new double[]{inputSweetness.length};
-        double[] errorArray = meanSquareLoss( bOutput , outputLayerOutputs);
-        for (int i =0 ; i< bOutput.length ; i++)
+        double [] dw = new double[inputSweetness.length];
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+
+        int epoch = Integer.parseInt(epochs.getText());
+        for(int l=0 ; l<epoch ; l++)
         {
-            if (errorArray[i] != 0)
+            double[] errorArray = meanSquareLoss(bOutput , outputLayerOutputs);
+            for (int i = 0; i < outputLayerOutputs.length; i++)
             {
-                for (int z = 0; z < inputSweetness.length; z++)
-                    dw[z]= inputSweetness[z] * inputColor[z] * lRate * errorArray[z];
-                for (int k = 0; k < numHidden; k++)
+                if (errorArray[i] != 0)
                 {
-                    for (int j = 0; j < numInputs; j++)
-                        weightsInputToHidden[k][j] = weightsInputToHidden[k][j] + dw[i];
+                    for (int z = 0; z < errorArray.length; z++)
+                        dw[z] = inputSweetness[z] * inputColor[z] * lRate * errorArray[z];
+                    for (int k = 0; k < numHidden; k++)
+                    {
+                        for (int j = 0; j < numInputs; j++)
+                            weightsInputToHidden[k][j] = weightsInputToHidden[k][j] + dw[i];
+                    }
                 }
+                errorRate.setText(String.valueOf(Double.parseDouble(String.valueOf(meanSquareLoss(bOutput , outputLayerOutputs)))));
             }
         }
+        infoMessage("Training ended successfully");
         //print();
+    }
+    public void infoMessage(String message)
+    {
+        info.setHeaderText(message);
+        info.showAndWait();
     }
     public double sigmoid(double x)
     {
@@ -158,7 +172,7 @@ public class neuralController implements Initializable
     {
         return x;
     }
-//    public void print()
+    //    public void print()
 //    {
 //        int numHidden = Integer.parseInt(idPerceptron.getText());
 //        double thresholdHidden[] = new double[numHidden];
@@ -196,9 +210,9 @@ public class neuralController implements Initializable
                 int aOutput = Integer.parseInt(parts[2]);
                 for (int i = 0; i< parts.length; i++)
                 {
-                    bOutput[i] = Double.parseDouble(String.valueOf(aOutput));
-                    inputSweetness[i] = Double.parseDouble(String.valueOf(sweetness));
-                    inputColor[i] = Double.parseDouble(String.valueOf(color));
+                    bOutput[i] = aOutput;
+                    inputSweetness[i] = sweetness;
+                    inputColor[i] = color;
                 }
                 data.add(new Table(sweetness, color, aOutput));           //1 = red, 2 = orange, 3 = purple   //1 = apple, 2 = orange, 3 = grape
             }
@@ -214,7 +228,7 @@ public class neuralController implements Initializable
     {
 
     }
-//    public void createNeurons ()
+    //    public void createNeurons ()
 //    {
 //        int num = Integer.parseInt(idPerceptron.getText());
 //        if(num == 1)
@@ -230,12 +244,12 @@ public class neuralController implements Initializable
 //            errorMessage("Please enter the neuron number!");
 //        }
 //    }
-    public static double[] meanSquareLoss(double bOutput[] , double outputLayerOutputs[]) {
-        // double sumSquare = 0;
-        double[] error = new double[]{bOutput.length};
-        for (int i = 0; i < bOutput.length; i++) {
-            error[i] =bOutput[i] - outputLayerOutputs[i];
-            // sumSquare += (error * error);
+    public double[] meanSquareLoss(double bOutput[], double outputLayerOutputs[])
+    {
+        double[] error = new double[outputLayerOutputs.length];
+        for (int i = 0; i < outputLayerOutputs.length; i++)
+        {
+            error[i] = bOutput[i] - outputLayerOutputs[i];
         }
         return error ;
     }
@@ -247,5 +261,3 @@ public class neuralController implements Initializable
         alert.showAndWait();
     }
 }
-
-
